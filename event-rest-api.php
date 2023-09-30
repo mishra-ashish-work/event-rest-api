@@ -15,7 +15,8 @@
 
 define('ERA_VERSION', '1.0');
 define('ERA_TEXT_DOMAIN', 'event-rest-api');
-define('ERA_ENDPOINT', 'era/v1/events');
+define('ERA_ENDPOINT', '/era/v1/');
+define('ERA_EVENT_BASE', 'events');
 
 include 'inc/core-import.php';
 
