@@ -11,7 +11,7 @@ The **Event Rest API** is a WordPress plugin that enables the creation, manageme
 
 ## Installation
 
-1. Download the plugin ZIP file from the [plugin repository](#) or GitHub.
+1. Download the plugin ZIP file from the [plugin repository](https://github.com/mishra-ashish-work/event-rest-api) or GitHub.
 2. Log in to your WordPress admin dashboard.
 3. Navigate to "Plugins" -> "Add New" and click on the "Upload Plugin" button.
 4. Choose the ZIP file you downloaded in step 1 and click "Install Now."
@@ -27,8 +27,9 @@ No additional configuration is required for the Event Rest API plugin. It is rea
 
 To create an event, you can make a POST request to the following endpoint:
 
+```
 /wp-json/era/v1/events/create
-
+```
 
 Include the following parameters in your request:
 
@@ -42,7 +43,9 @@ Include the following parameters in your request:
 
 To update an event, make a POST request to the following endpoint:
 
+```
 /wp-json/era/v1/events/update
+```
 
 
 Include the following parameters in your request:
@@ -58,7 +61,9 @@ Include the following parameters in your request:
 
 To delete an event, make a DELETE request to the following endpoint:
 
+```
 /wp-json/era/v1/events/delete
+```
 
 
 Include the following parameter in your request:
@@ -69,7 +74,9 @@ Include the following parameter in your request:
 
 To retrieve a list of events based on specific criteria, make a GET request to the following endpoint:
 
+```
 /wp-json/era/v1/events/list
+```
 
 
 Include query parameters to filter the events:
