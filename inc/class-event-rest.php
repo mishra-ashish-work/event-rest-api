@@ -96,7 +96,8 @@ class ERA_EVENT_REST extends WP_REST_Controller {
             $era_meta_query[] = [
               'key' => '_event_start_date',
               'value' => date('Y-m-d\TH:i:s', strtotime($date_param)),
-              'compare' => '=',
+              'compare' => '>=',
+              'type' => 'DATETIME'
             ];
         } else {
             return new WP_Error('invalid_date', 'Invalid date parameter.', array('status' => 400));
@@ -150,8 +151,6 @@ class ERA_EVENT_REST extends WP_REST_Controller {
       //Title Like param
       if($title_param){
         $era_event_args['s'] = $title_param;
-      }else{
-        return new WP_Error('invalid_title', 'Title cannot be empty', array('status' => 400));
       }
 
       //set meta query
@@ -159,7 +158,7 @@ class ERA_EVENT_REST extends WP_REST_Controller {
 
       //set tax query
       $era_event_args['tax_query'] = $era_tax_query;
-
+      print_r($era_event_args);
       $era_posts = new WP_Query($era_event_args);
       if ( $era_posts->have_posts() ) {
         $era_events = [];
