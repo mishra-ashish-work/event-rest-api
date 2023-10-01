@@ -1,10 +1,25 @@
 <?php 
+/**
+ * Class: ERA_REST_Helper
+ * Description: This class handles basic authentication for the REST API endpoints.
+ */
 class ERA_REST_Helper{
+    
+    /**
+     * Constructor for the ERA_REST_Helper class.
+     * It adds filters for authentication and error handling.
+     */
     public function __construct(){
         add_filter( 'rest_authentication_errors', array($this, 'json_basic_auth_error') );
         add_filter( 'determine_current_user', array($this, 'json_basic_auth_handler'), 20 );
     }
 
+    /**
+     * Handles JSON basic authentication.
+     *
+     * @param mixed $user The current user object.
+     * @return mixed The authenticated user object or null.
+     */
     public function json_basic_auth_handler( $user ) {
         global $wp_json_basic_auth_error;
     
@@ -45,8 +60,13 @@ class ERA_REST_Helper{
         return $user->ID;
     }
 
+    /**
+     * Handles JSON basic authentication error responses.
+     *
+     * @param mixed $error The authentication error.
+     * @return WP_Error|null The error response or null.
+     */
     public function json_basic_auth_error( $error ) {
-        // Passthrough other errors
         if ( ! empty( $error ) ) {
             return new WP_Error(
                 'rest_error',
@@ -69,5 +89,6 @@ class ERA_REST_Helper{
     }
 }
 
+// Create an instance of the ERA_REST_Helper class.
 new ERA_REST_Helper();
 ?>

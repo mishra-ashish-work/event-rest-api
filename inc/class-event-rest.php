@@ -2,22 +2,31 @@
 /**
  * Package: Event Rest API
  * Class: Event Rest
- * Description: Class to control all the rest api development.
+ * Description: This class is responsible for controlling all REST API development related to events.
  */
 
- class ERA_EVENT_REST extends WP_REST_Controller {
+class ERA_EVENT_REST extends WP_REST_Controller {
 
+  /**
+   * Constructor for the ERA_EVENT_REST class.
+   * It initializes and registers the REST API routes.
+   */
   public function __construct(){
     add_action('rest_api_init', array($this, 'era_register_routes'));
   }
 
+  /**
+   * Register REST API routes for Event Rest API.
+   */
   public function era_register_routes(){
+    // Register route to list events.
     register_rest_route(ERA_ENDPOINT, '/'.ERA_EVENT_BASE.'/list', array(
         'methods' => WP_REST_Server::READABLE,
         'callback' => [$this, 'era_get_events']
       ),
     );
 
+    // Register route to show an event by ID.
     register_rest_route(ERA_ENDPOINT, '/'.ERA_EVENT_BASE.'/show', array(
       'methods' => WP_REST_Server::READABLE,
       'callback' => [$this, 'era_show_event'],
@@ -31,6 +40,7 @@
     ),
     );
 
+    // Register route to create an event.
     register_rest_route(ERA_ENDPOINT, '/' . ERA_EVENT_BASE . '/create', array(
       'methods'             => WP_REST_Server::CREATABLE,
       'callback'            => array($this, 'era_create_event'),
@@ -38,6 +48,7 @@
       'args'                => $this->get_endpoint_args_for_item_schema(true),
     ));
 
+    // Register route to update an event.
     register_rest_route(ERA_ENDPOINT, '/' . ERA_EVENT_BASE . '/update', array(
       'methods'             => WP_REST_Server::EDITABLE,
       'callback'            => array($this, 'era_update_event'),
@@ -45,15 +56,21 @@
       'args'                => $this->get_endpoint_args_for_item_schema(true),
     ));
 
+    // Register route to delete an event.
     register_rest_route(ERA_ENDPOINT, '/' . ERA_EVENT_BASE . '/delete', array(
       'methods'             => WP_REST_Server::DELETABLE,
       'callback'            => array($this, 'era_delete_event'),
       'permission_callback' => array($this, 'era_events_permissions_check'),
       'args'                => array('force' => array('default' => false,),),
     ));
-  
   }
-  
+
+  /**
+   * Callback function to get events based on provided criteria.
+   *
+   * @param WP_REST_Request $request The REST API request object.
+   * @return WP_REST_Response|WP_Error The response with events or an error.
+   */
   public function era_get_events(WP_REST_Request $request){
     if(!empty($request->get_params())){
 
@@ -187,6 +204,12 @@
     }
   }
 
+  /**
+   * Callback function to create an event.
+   *
+   * @param WP_REST_Request $request The REST API request object.
+   * @return WP_REST_Response|WP_Error The response with the created event or an error.
+   */
   public function era_create_event(WP_REST_Request $request){
     //Category Validation
     $era_term = $request->get_param('category');
@@ -257,6 +280,12 @@
     return new WP_REST_Response( $era_event, 200 );
   }
 
+  /**
+   * Callback function to update an event.
+   *
+   * @param WP_REST_Request $request The REST API request object.
+   * @return WP_REST_Response|WP_Error The response with the updated event or an error.
+   */
   public function era_update_event(WP_REST_Request $request){
     //ID Check
     $era_event_id = intval($request->get_param('id'));
@@ -323,6 +352,12 @@
     }
   }
 
+  /**
+   * Callback function to delete an event.
+   *
+   * @param WP_REST_Request $request The REST API request object.
+   * @return WP_REST_Response|WP_Error The response indicating success or an error.
+   */
   public function era_delete_event(WP_REST_Request $request){
     $era_event_id = $request->get_param('id');
     if ( get_post_type($era_event_id) === 'events' ) {
@@ -337,6 +372,12 @@
     }
   }
 
+  /**
+   * Callback function to show an event.
+   *
+   * @param WP_REST_Request $request The REST API request object.
+   * @return WP_REST_Response|WP_Error The response indicating success or an error.
+   */
   public function era_show_event(WP_REST_Request $request){
     $era_event_id = $request->get_param('id');
     if ( get_post_type($era_event_id) === 'events' ) {
@@ -355,11 +396,17 @@
     }
   }
 
+  /**
+   * Callback function to check permissions for event operations.
+   *
+   * @return bool Whether the current user has permission (administrator).
+   */
   public function era_events_permissions_check(){
     return current_user_can('administrator');
   }
     
 }
 
+// Create an instance of the ERA_EVENT_REST class.
 $era_event_controller = new ERA_EVENT_REST();
 ?>
